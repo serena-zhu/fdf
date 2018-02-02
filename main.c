@@ -6,43 +6,61 @@
 /*   By: yazhu <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/30 11:03:49 by yazhu             #+#    #+#             */
-/*   Updated: 2018/02/01 15:41:45 by yazhu            ###   ########.fr       */
+/*   Updated: 2018/02/01 18:31:32 by yazhu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	draw_line(double x1, double y1, double x2, double y2, t_data *data)
+void	draw_line(t_data *data)
 {
-	double tmp;
-	double line_len;
-	double m;
-	double y_new;
+	double	tmp;
+	double	line_len;
+	double	m;
+	double	y_new;
+	int		rgb;
 
-	tmp = x1;
-	line_len = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-	m = (y2 - y1) / (x2 - x1);
-	while (tmp <= x2)
+	rgb = (255 << 16) | (255 << 8) | (255);
+	tmp = data->x1;
+	line_len = sqrt((data->x2 - data->x1) * (data->x2 - data->x1)
+				+ (data->y2 - data->y1) * (data->y2 - data->y1));
+	m = (data->y2 - data->y1) / (data->x2 - data->x1);
+	while (tmp <= data->x2)
 	{
-		y_new = m * (tmp - x1) + y1;
-		mlx_pixel_put(data->mlx, data->window, tmp, y_new, (255 << 16) | (255 << 8) | (255));
-		tmp += (x2 - x1) / line_len;
+		y_new = m * (tmp - data->x1) + data->y1;
+		mlx_pixel_put(data->mlx, data->window, tmp, y_new, rgb);
+		tmp += (data->x2 - data->x1) / line_len;
 	}
 }
 
-void	draw_image(t_data *data)
+void	get_two_pts_along_x(int x, int y, char **line_arr, t_data *data)
+{
+	double theta;
+
+	theta = data->theta;
+	data->z = ft_atoi(line_arr[x]) * data->sc;
+	data->x1 = (x + y) * sin(theta) * data->sc + data->x0;
+	data->y1 = (y - x) * cos(theta) * data->sc - data->z + data->y0;
+	data->z = ft_atoi(line_arr[x + 1]) * data->sc;
+	data->x2 = ((x + 1) + y) * sin(theta) * data->sc + data->x0;
+	data->y2 = (y - (x + 1)) * cos(theta) * data->sc - data->z + data->y0;
+}
+
+void	get_next_point_along_y(int x, int y, char **line_arr2, t_data *data)
+{
+	double theta;
+
+	theta = data->theta;
+	data->z = ft_atoi(line_arr2[x]) * data->sc;
+	data->x2 = (x + (y + 1)) * sin(theta) * data->sc + data->x0;
+	data->y2 = (y + 1 - x) * cos(theta) * data->sc - data->z + data->y0;
+}
+
+void	draw_image(t_data *data, int x, int y)
 {
 	char **line_arr;
 	char **line_arr2;
-	int x;
-	int	y;
-	double z;
-	double x1;
-	double y1;
-	double x2;
-	double y2;
-	
-	y = 0;
+
 	while (y < (data->y_max - 1))
 	{
 		line_arr = ft_strsplit(data->map[y], ' ');
@@ -50,19 +68,10 @@ void	draw_image(t_data *data)
 		x = 0;
 		while (x < (data->x_max - 1))
 		{
-			z = ft_atoi(line_arr[x]) * data->scale_factor;	
-			x1 = ((double)x - (double)y) * cos(data->theta) * data->scale_factor + data->x0;
-			y1 = ((double)x + (double)y) * sin(data->theta) * data->scale_factor - z + data->y0;
-			z = ft_atoi(line_arr[x + 1]) * data->scale_factor;
-			x2 = ((double)(x + 1) - (double)y) * cos(data->theta) * data->scale_factor + data->x0;
-			y2 = ((double)(x + 1) + (double)y) * sin(data->theta) * data->scale_factor - z + data->y0;
-			draw_line(x1, y1, x2, y2, data);
-			z = ft_atoi(line_arr2[x]) * data->scale_factor;
-			x2 = x1;
-			y2 = y1;
-			x1 = ((double)x - (double)(y + 1)) * cos(data->theta) * data->scale_factor + data->x0;
-			y1 = ((double)x + (double)(y + 1)) * sin(data->theta) * data->scale_factor - z + data->y0;
-			draw_line(x1, y1, x2, y2, data);
+			get_two_pts_along_x(x, y, line_arr, data);
+			draw_line(data);
+			get_next_point_along_y(x, y, line_arr2, data);
+			draw_line(data);
 			x++;
 		}
 		free(line_arr);
@@ -74,7 +83,10 @@ void	draw_image(t_data *data)
 int		exit_pgm(int key)
 {
 	if (key == 53)
+	{
+		//free data->map
 		exit(0);
+	}
 	return (0);
 }
 
@@ -82,7 +94,7 @@ void	find_max_z(char **line_arr, t_data *data)
 {
 	int i;
 	int	z;
-	
+
 	i = 0;
 	while (line_arr[i] != '\0')
 	{
@@ -90,15 +102,15 @@ void	find_max_z(char **line_arr, t_data *data)
 		if (z > data->z_max)
 			data->z_max = z;
 		i++;
-	}	
+	}
 }
 
 int		process_map(char *map, t_data *data)
 {
 	int		j;
-	int 	width;
-	char 	**line_arr;
-	
+	int		width;
+	char	**line_arr;
+
 	j = 0;
 	data->map = ft_strsplit(map, '\n');
 	while (data->map[j] != '\0')
@@ -126,7 +138,7 @@ char	*read_map(int fd, t_data *data)
 {
 	char	*line;
 	char	*tmp;
-	char 	*map;
+	char	*map;
 
 	map = ft_strnew(0);
 	while (get_next_line(fd, &line) == 1)
@@ -149,12 +161,16 @@ void	initialize_struct(t_data *data)
 	data->x_max = 0;
 	data->y_max = 0;
 	data->z_max = 0;
-	data->win_size_x = 1000;
-	data->win_size_y = 1000;
-	data->theta = M_PI / 6;
-	data->scale_factor = 1;
+	data->win_x = 1000;
+	data->win_y = 1000;
+	data->theta = M_PI / 3;
+	data->sc = 1;
 	data->x0 = 0;
 	data->y0 = 0;
+	data->x1 = 0;
+	data->y1 = 0;
+	data->x2 = 0;
+	data->y2 = 0;
 }
 
 /*
@@ -169,23 +185,26 @@ void	set_scale_and_origin(t_data *data)
 {
 	double	max_width;
 	double	max_height;
+	int		padding;
 
-	max_width = (data->x_max + data->y_max) * cos(data->theta);
-	max_height = (data->x_max + data->y_max) * sin(data->theta) + data->z_max;
-	data->scale_factor = 0.8 * data->win_size_x / max_width;
-	if (0.8 *data-> win_size_y / max_height < data->scale_factor)
-		data->scale_factor = 0.8 * data->win_size_y / max_height;
-	data->x0 = (double)data->y_max * cos(data->theta) * data->scale_factor + 20;
-	data->y0 = (double)data->z_max * data->scale_factor + 20;
-	data->win_size_x = max_width * data->scale_factor + 40;
-	data->win_size_y = max_height * data->scale_factor + 40;
+	padding = 40;
+	max_width = (data->x_max + data->y_max) * sin(data->theta);
+	max_height = (data->x_max + data->y_max) * cos(data->theta) + data->z_max;
+	data->sc = 0.8 * data->win_x / max_width;
+	if (0.8 * data->win_y / max_height < data->sc)
+		data->sc = 0.8 * data->win_y / max_height;
+	data->x0 += padding / 2;
+	data->y0 = (data->x_max * cos(data->theta) + data->z_max) * data->sc;
+	data->y0 += padding / 2;
+	data->win_x = max_width * data->sc + padding;
+	data->win_y = max_height * data->sc + padding;
 }
 
 int		main(int argc, char **argv)
 {
 	int		fd;
+	int		ret;
 	t_data	data;
-	int 	ret;
 
 	if (argc != 2)
 		return (usage_error());
@@ -196,10 +215,10 @@ int		main(int argc, char **argv)
 		return (map_errors(ret));
 	set_scale_and_origin(&data);
 	if (!(data.mlx = mlx_init()))
-		return (close_fd_and_exit(fd, 1));
-	data.window = mlx_new_window(data.mlx, data.win_size_x, data.win_size_y, argv[1]);
-	draw_image(&data);
+		return (close_fd_and_exit(fd, 1)); //free data.map also?
+	data.window = mlx_new_window(data.mlx, data.win_x, data.win_y, argv[1]);
+	draw_image(&data, 0, 0);
 	mlx_key_hook(data.window, exit_pgm, (void *)0);
 	mlx_loop(data.mlx);
-	return (close_fd_and_exit(fd, 0));
+	return (close_fd_and_exit(fd, 0)); //free data.map also?
 }
