@@ -6,12 +6,13 @@
 #    By: yazhu <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/26 19:06:12 by yazhu             #+#    #+#              #
-#    Updated: 2018/01/31 13:56:34 by yazhu            ###   ########.fr        #
+#    Updated: 2018/02/02 18:04:28 by yazhu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
-SRCS = main.c errors.c get_next_line.c
+SRCS = main.c read_process_map.c draw_image.c hex_to_dec.c errors_free_close.c \
+	   get_next_line.c
 OFILES = $(SRCS:.c=.o)
 
 LIBFT = libft/
