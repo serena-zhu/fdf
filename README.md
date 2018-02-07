@@ -18,4 +18,5 @@ The number of values in the first line sets the range for horizontal position, t
 
 Program output of the example map above:
 
-![alt_tag](sample_map_output.png =300x250)
+![alt_tag](sample_map_output.png)
+<img src="sample_map_output.png" height="50%">
