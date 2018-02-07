@@ -1,7 +1,7 @@
 # fdf
 A 3D graphic representation of a relief landscape
 
-This is a program that creates a simplified graphic wireframe represenatation of a relief landscape by linking points via segments. The program takes a file as a parameter.
+This is a program that creates a simplified graphic wireframe represenatation of a relief landscape by linking points via segments. This program uses a minilibx library developed internally by 42. The program takes a file as a parameter.
 
 Usage : ./fdf <filename>
 
@@ -9,18 +9,13 @@ Example of a valid map file:
 
 ![alt tag](valid_map_sample.png)
 
-0  0  0  0  0  0  0  0  0  0
-0 10 10 10 10 10 10 10 10  0
-0 10 20,0xFF0000 15,0xFF0000 12 15,0xFF0000 17,0xFF0000 20,0xFF0000 10  0
-0 10 15,0xFF0000 10 12 15,0xFF0000 15,0xFF0000 15,0xFF0000 10  0
-0  5 15,0xFF0000 10 12 15,0xFF0000 15,0xFF0000 13 10  0
-0  5 10  5  7 12 12 12 10  0
-0  5  7  1  2  7  5  5  7  0
-0  3  0  0  1  2  2  2  5  0
-0  1  0  0  0  0  0  0  3  0
-0  0  0  0  0  0  0  0  0  0
-
 Each number above corresponds to a point in space, where...
 The horizontal position corresponds to its axis. 
 The vertical position corresponds to its ordinate.
 The value corresponds to its altitude with an optional color value in hexadecimal separated by a comma
+
+The number of values in the first line sets the range for horizontal position, therefore any extras will be ignored. The program will display an error message if subsequent lines contain fewer number of values.
+
+Program output of the example map above:
+
+![alt tag](sample_map_output.png)
