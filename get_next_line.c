@@ -6,7 +6,7 @@
 /*   By: yazhu <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 12:05:33 by yazhu             #+#    #+#             */
-/*   Updated: 2018/01/30 18:16:23 by yazhu            ###   ########.fr       */
+/*   Updated: 2018/02/06 19:23:12 by yazhu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ static char		*keep_reading(t_struct *files, const int fd)
 			return (NULL);
 		files[fd].i = 0;
 		files[fd].line = (ret == 0 && tmp[0] != '\0') ? 1 : has_line(files, fd);
-		if (ret == 0 && tmp[0] == '\0')
+		if (ret == 0 && tmp[0] == '\0' && (files[fd].end = 1))
 		{
 			ft_strdel(&files[fd].buf);
-			files[fd].end = 1;
+			ft_strdel(&tmp);
 			return (NULL);
 		}
 		tmp = ft_strcat(tmp, files[fd].buf);
