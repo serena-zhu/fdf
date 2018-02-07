@@ -7,7 +7,7 @@ Usage : ./fdf <filename>
 
 Example of a valid map file:
 
-![alt tag](https://github.com/serena-zhu/fdf/blob/master/valid_map_sample.png)
+![alt tag](valid_map_sample.png)
 
 0  0  0  0  0  0  0  0  0  0
 0 10 10 10 10 10 10 10 10  0
