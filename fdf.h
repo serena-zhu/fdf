@@ -6,7 +6,7 @@
 /*   By: yazhu <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 15:45:10 by yazhu             #+#    #+#             */
-/*   Updated: 2018/02/02 18:11:00 by yazhu            ###   ########.fr       */
+/*   Updated: 2018/02/06 19:35:31 by yazhu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,16 @@ typedef struct	s_data
 }				t_data;
 
 int				hex_to_dec(char *s);
-void			free_map(t_data *data);
 int				close_free_and_exit(int fd, t_data *data, int return_value);
 int				map_errors(int errors, int fd, t_data *data);
 int				map_file_error(char *file_name);
 int				usage_error(void);
+int				free_line_arr(char **line_arr, int return_value);
+void			draw_line(t_data *data);
 void			draw_image(t_data *data, int x, int y);
 void			set_scale_and_origin(t_data *data);
-int				process_map(char *map, t_data *data);
-char			*read_map(int fd, t_data *data);
+int				process_map(t_data *data);
+void			read_map(int fd, t_data *data);
 void			initialize_struct(t_data *data);
 int				main(int argc, char **argv);
 
