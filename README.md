@@ -7,6 +7,8 @@ Usage : ./fdf <filename>
 
 Example of a valid map file:
 
+![Screenshot] (valid_map_sample.png)
+
 0  0  0  0  0  0  0  0  0  0
 0 10 10 10 10 10 10 10 10  0
 0 10 20,0xFF0000 15,0xFF0000 12 15,0xFF0000 17,0xFF0000 20,0xFF0000 10  0
