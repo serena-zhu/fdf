@@ -6,33 +6,11 @@
 /*   By: yazhu <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 17:57:17 by yazhu             #+#    #+#             */
-/*   Updated: 2018/02/02 17:59:50 by yazhu            ###   ########.fr       */
+/*   Updated: 2018/02/06 16:41:56 by yazhu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-static void		draw_line(t_data *data)
-{
-	double	tmp;
-	double	line_len;
-	double	m;
-	double	y_new;
-	int		rgb;
-
-	rgb = data->color1;
-	tmp = data->x1;
-	line_len = sqrt((data->x2 - data->x1) * (data->x2 - data->x1)
-				+ (data->y2 - data->y1) * (data->y2 - data->y1));
-	m = (data->y2 - data->y1) / (data->x2 - data->x1);
-	while (tmp <= data->x2)
-	{
-		y_new = m * (tmp - data->x1) + data->y1;
-		mlx_pixel_put(data->mlx, data->window, tmp, y_new, rgb);
-		tmp += (data->x2 - data->x1) / line_len;
-		rgb += (data->color2 - data->color1) / line_len;
-	}
-}
 
 static void		get_pts_along_x(int x, int y, char **line_arr, t_data *data)
 {
@@ -80,31 +58,50 @@ static void		get_next_point_along_y(int x, int y, char **line_arr2,
 	data->y2 = ((y + 1) - x) * cos(theta) * data->sc - data->z + data->y0;
 }
 
+/*
+**	option [1] : reset color1 only
+**  option [2] : reset color2 only
+**  option [3] : reset both colors
+*/
+
+static int		reset_default_color(t_data *data, int option)
+{
+	if (option == 1 || option == 3)
+		data->color1 = (255 << 16) | (255 << 8) | (255);
+	if (option == 2 || option == 3)
+		data->color2 = data->color1;
+	return (1);
+}
+
+/*
+**	l_a2 = line_arr2
+*/
+
 void			draw_image(t_data *data, int x, int y)
 {
 	char **line_arr;
-	char **line_arr2;
+	char **l_a2;
 
 	while (++y < (data->y_max) && (x = -1) == -1)
 	{
 		line_arr = ft_strsplit(data->map[y], ' ');
-		line_arr2 = ft_strsplit(data->map[y + 1], ' ');
+		((y + 1) < data->y_max) ? l_a2 = ft_strsplit(data->map[y + 1], ' ') : 0;
 		while (++x < (data->x_max))
 		{
-			if (x < (data->x_max - 1))
+			if (x < (data->x_max - 1) && reset_default_color(data, 3))
 			{
 				get_pts_along_x(x, y, line_arr, data);
 				draw_line(data);
 			}
-			if (y < (data->y_max - 1))
+			if (y < (data->y_max - 1) && reset_default_color(data, 2))
 			{
-				if (x == (data->x_max - 1))
+				if (x == (data->x_max - 1) && reset_default_color(data, 1))
 					get_pts_along_x(x, y, line_arr, data);
-				get_next_point_along_y(x, y, line_arr2, data);
+				get_next_point_along_y(x, y, l_a2, data);
 				draw_line(data);
 			}
 		}
-		free(line_arr);
-		free(line_arr2);
+		free_line_arr(line_arr, 0);
+		((y + 1) < data->y_max) ? free_line_arr(l_a2, 0) : 0;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: yazhu <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 18:01:02 by yazhu             #+#    #+#             */
-/*   Updated: 2018/02/02 18:05:52 by yazhu            ###   ########.fr       */
+/*   Updated: 2018/02/06 19:36:21 by yazhu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void			set_scale_and_origin(t_data *data)
 	data->win_y = max_height * data->sc + padding;
 }
 
-static void		find_max_z(char **line_arr, t_data *data)
+static int		find_width_and_max_z(char **line_arr, t_data *data)
 {
 	int i;
 	int	z;
@@ -52,38 +52,36 @@ static void		find_max_z(char **line_arr, t_data *data)
 			data->z_max = z;
 		i++;
 	}
+	return (i);
 }
 
-int				process_map(char *map, t_data *data)
+int				process_map(t_data *data)
 {
 	int		j;
 	int		width;
 	char	**line_arr;
 
 	j = 0;
-	data->map = ft_strsplit(map, '\n');
 	while (data->map[j] != '\0')
 		j++;
 	if (j != data->y_max || data->y_max == 0)
 		return (1);
 	j = 0;
-	while (j < data->y_max && !(width = 0))
+	while (j < data->y_max)
 	{
 		line_arr = ft_strsplit(data->map[j], ' ');
-		find_max_z(line_arr, data);
-		while (line_arr[width] != '\0')
-			width++;
+		width = find_width_and_max_z(line_arr, data);
 		if (j == 0 && width == 0)
-			return (1);
+			return (free_line_arr(line_arr, 1));
 		(j == 0) ? data->x_max = width : 0;
 		if (j++ > 0 && width < data->x_max)
-			return (2);
-		free(line_arr);
+			return (free_line_arr(line_arr, 2));
+		free_line_arr(line_arr, 0);
 	}
 	return (0);
 }
 
-char			*read_map(int fd, t_data *data)
+void			read_map(int fd, t_data *data)
 {
 	char	*line;
 	char	*tmp;
@@ -97,11 +95,12 @@ char			*read_map(int fd, t_data *data)
 		map = ft_strcpy(map, tmp);
 		map = ft_strcat(map, line);
 		map[ft_strlen(tmp) + ft_strlen(line)] = '\n';
-		free(tmp);
-		free(line);
+		ft_strdel(&tmp);
+		ft_strdel(&line);
 		data->y_max++;
 	}
-	return (map);
+	data->map = ft_strsplit(map, '\n');
+	ft_strdel(&map);
 }
 
 void			initialize_struct(t_data *data)

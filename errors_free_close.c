@@ -6,27 +6,30 @@
 /*   By: yazhu <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 17:54:52 by yazhu             #+#    #+#             */
-/*   Updated: 2018/02/02 17:54:56 by yazhu            ###   ########.fr       */
+/*   Updated: 2018/02/06 19:35:18 by yazhu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	free_map(t_data *data)
+int		free_line_arr(char **line_arr, int return_value)
 {
 	int j;
 
-	j = 0;
-	while (j < data->y_max)
-		free(data->map[j++]);
-	free(data->map);
+	if (line_arr)
+	{
+		j = 0;
+		while (line_arr[j] != '\0')
+			ft_strdel(&line_arr[j++]);
+		free(line_arr);
+	}
+	return (return_value);
 }
 
 int		close_free_and_exit(int fd, t_data *data, int return_value)
 {
 	close(fd);
-	free_map(data);
-	return (return_value);
+	return (free_line_arr(data->map, return_value));
 }
 
 /*
@@ -40,15 +43,14 @@ int		map_errors(int error, int fd, t_data *data)
 		ft_putstr("No data found.\n");
 	if (error == 2)
 		ft_putstr("Found wrong line length. Exiting\n");
-	if (data->map)
-		free_map(data);
+	free_line_arr(data->map, 0);
 	close(fd);
 	return (1);
 }
 
 int		map_file_error(char *file_name)
 {
-	ft_putstr("No file maps/");
+	ft_putstr("No file ");
 	ft_putendl(file_name);
 	return (1);
 }
