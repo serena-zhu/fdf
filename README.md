@@ -7,7 +7,7 @@ Usage : ./fdf \<filename>
 
 Example of a valid map file:
 
-![alt_tag](valid_map_sample.png =100x250)
+![alt_tag](valid_map_sample.png | width=100)
 
 Each number above corresponds to a point in space, where...
 The horizontal position corresponds to its axis. 
@@ -18,4 +18,4 @@ The number of values in the first line sets the range for horizontal position, t
 
 Program output of the example map above:
 
-![](sample_map_output.png =300x250 )
+![alt_tag](sample_map_output.png =300x250)
