@@ -1,13 +1,13 @@
 # fdf
 A 3D graphic representation of a relief landscape
 
-This is a program that creates a simplified graphic wireframe represenatation of a relief landscape by linking points via segments. This program uses a minilibx library developed internally by 42. The program takes a file as a parameter.
+This is a program that creates a simplified graphic wireframe represenatation of a relief landscape by linking points via segments. The landscape will be shown in isometric projection. This program uses a minilibx library developed internally by 42. The program takes a file as a parameter.
 
-Usage : ./fdf <filename>
+Usage : ./fdf \<filename>
 
 Example of a valid map file:
 
-![alt tag](valid_map_sample.png)
+![](valid_map_sample.png =100x250)
 
 Each number above corresponds to a point in space, where...
 The horizontal position corresponds to its axis. 
@@ -18,4 +18,4 @@ The number of values in the first line sets the range for horizontal position, t
 
 Program output of the example map above:
 
-![alt tag](sample_map_output.png)
+![](sample_map_output.png =300x250 )
