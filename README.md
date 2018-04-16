@@ -1,8 +1,8 @@
 # <a name="top">fdf</a>
 
-Fdf is a program that takes a file with coordinates and altitude information of a landscape and returns an isometric graphic wireframe representation. 
+Fdf is a program that takes a file with coordinates and altitude information of a landscape and returns an isometric graphic wireframe representation drawn on a new window.
 
-This program uses a minilibx library deveoped internally by 42 Silicon Valley. 
+This program uses a graphics library (miniLibX) deveoped internally by 42 Silicon Valley. 
 
 ##Contents
 
@@ -28,7 +28,7 @@ The fdf program is written in C, using only the following functions from the sta
 
 #### `System Requirements`
 
-The miniLibx library is only supported by 
+The miniLibX library is only supported by 
 * macOS Sierra
 * macOS Elcapitan [files are included in the minilibx folder but you will need to change the source in the Makefile]
 
@@ -63,12 +63,14 @@ Running the program without any parameters will prompt the usage message.
 
 #### `Invalid Files`
 ```bash
-$ ./fdf invalid_file.txt
+$ ./fdf invalid_file.fdf
 error
 ```
 Passing an invalid (or empty) file will prompt the error message. 
 
 #### `Example of a Valid Map File`
+
+Test maps are included in the [test_maps](/test_maps) folder. Below is the [elem-col.fdf](/test_maps/elem-col.fdf) file:
 
 <img src="valid_map_sample.png" width="500" height="150">
 
