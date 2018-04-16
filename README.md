@@ -4,7 +4,7 @@ Fdf is a program that takes a file with coordinates and altitude information of 
 
 This program uses a graphics library (miniLibX) deveoped internally by 42 Silicon Valley. 
 
-##Contents
+## Contents
 
 [Language & Functions Used](#language_functions) | [Installation](#install) | [Usage & Example](#usage_example)
 
@@ -70,21 +70,23 @@ Passing an invalid (or empty) file will prompt the error message.
 
 #### `Example of a Valid Map File`
 
-Test maps are included in the [test_maps](/test_maps) folder. Below is the [elem-col.fdf](/test_maps/elem-col.fdf) file:
+Test maps are included in the [test_maps](/test_maps) folder. Below is the [elem-col.fdf](/test_maps/elem-col.fdf) file, for example:
 
 <img src="valid_map_sample.png" width="500" height="150">
 
 Each number above corresponds to a point in space, where
 * The horizontal position corresponds to its axis. 
 * The vertical position corresponds to its ordinate.
-* The value corresponds to its altitude with an optional color value in hexadecimal separated by a comma
-* The altitude value may be followed by hexadecimal color; the colors along each line segment are interpolated by the default (white) or specified colors of the points at each end
+* The value corresponds to its altitude with an optional color value in hexadecimal separated by a comma.
+
+The colors along each line segment are interpolated by the default (white) or specified colors of the points at each end
 
 The number of values in the first line sets the range for horizontal position, therefore any extras will be ignored. The program will display an error message if subsequent lines contain fewer number of values.
 
 ### `Example Program Output`
 
 Here is the output of the valid map file in the example above.
+
 <img src="sample_map_output.png" width="300" height="500">
 
 <a href="#top">↥ back to top</a>
