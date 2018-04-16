@@ -79,13 +79,13 @@ Each number above corresponds to a point in space, where
 * The vertical position corresponds to its ordinate.
 * The value corresponds to its altitude with an optional color value in hexadecimal separated by a comma.
 
-The colors along each line segment are interpolated by the default (white) or specified colors of the points at each end
+The colors along each line segment are interpolated by the default (white) or specified colors of the points at each end.
 
 The number of values in the first line sets the range for horizontal position, therefore any extras will be ignored. The program will display an error message if subsequent lines contain fewer number of values.
 
-### `Example Program Output`
+#### `Example Program Output`
 
-Here is the output of the valid map file in the example above.
+Here is the output of the [elem-col.fdf](/test_maps/elem-col.fdf) file in the example above.
 
 <img src="sample_map_output.png" width="300" height="500">
 
