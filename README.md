@@ -85,7 +85,7 @@ The number of values in the first line sets the range for horizontal position, t
 
 #### `Example Program Output`
 
-Here is the output of the [elem-col.fdf](/test_maps/elem-col.fdf) file in the example above.
+Here is the output of the [elem-col.fdf](/test_maps/elem-col.fdf) file shown in the example above:
 
 <img src="sample_map_output.png" width="300" height="500">
 
