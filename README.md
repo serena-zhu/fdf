@@ -29,7 +29,8 @@ The fdf program is written in C, using only the following functions from the sta
 #### `System Requirements`
 
 The miniLibX library is only supported by 
-* macOS Sierra
+* macOS Sierra 
+or 
 * macOS Elcapitan [files are included in the minilibx folder but you will need to change the source in the Makefile]
 
 ```
